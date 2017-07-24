@@ -7,19 +7,71 @@ const js = `
 let isConnected = false;
 
 const hookLogger = (logItem) => {
+  if (typeof logItem.action.type !== 'string' || logItem.action.type.split('_')[0] !== 'APOLLO') {
+    return;
+  }
 
+  console.log(logItem);
+  /*
   if (!!window.__APOLLO_CLIENT__) {
-    
+    var testDate = new Date();
+    logItem.state.queries[2].variables.date = testDate;
+    logItem.state.queries[2].variables.testFunc = function() {
+      console.log('queries');
+    }
+
+    //if (logItem.state.mutations.s {
+    if (Object.keys(logItem.state.mutations)) {
+      console.log('in mutations if');
+      /*
+      logItem.state.mutations[1].variables.mutDate = testDate;
+      logItem.state.mutations[1].variables.testFunc = function() {
+        console.log('mutations');
+      }
+      */
+    }
+
+    console.log('queries: ', logItem.state.queries, 'queryObjectType', typeof logItem.state.queries);
+    //const queryVars = logItem.state.queries[2].variables;
+    const queries = logItem.state.queries;
+    const mutations = logItem.state.mutations;
+    for (var query in queries) {
+      const queryVars = logItem.state.queries[query].variables;
+      for (var field in queryVars) {
+      // stringify date objects
+        if (Object.prototype.toString.call(queryVars[field]) == '[object Date]') {
+          queryVars[field] = queryVars[field].toString();
+        }
+      
+      // wrap functions in eval and stringify
+        else if (typeof queryVars[field] == 'function') {
+          queryVars[field] = 'eval(' + queryVars[field] + ');';
+        }
+      }
+    }
+
+    for (var mut in mutations) {
+      const mutationVars = logItem.state.queries[mut].variables;
+      for (var field in mutationVars) {
+        if (Object.prototype.toString.call(mutationVars[field]) == '[object Date]') {
+          mutationVars[field] = mutationVars[field].toString();
+        }
+      
+      // wrap functions in eval and stringify
+        else if (typeof mutationVars[field] == 'function') {
+          mutationVars[field] = 'eval(' + mutationVars[field] + ');';
+        }
+      }
+    }
+    */
+
     const trimmedObj = {
       queries: logItem.state.queries,
       mutations: logItem.state.mutations
     }
 
+    console.log('trimmedObj ', trimmedObj);
     window.postMessage({ trimmedObj }, '*');
-
-    if (typeof logItem.action.type !== 'string' || logItem.action.type.split('_')[0] !== 'APOLLO') {
-        return;
-    }
     window.__action_log__.push(logItem);    
   }
 }
