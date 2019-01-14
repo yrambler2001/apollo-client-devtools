@@ -1,5 +1,22 @@
 # Changelog (started at 2.1.0)
 
+## vNext
+
+* Fix outdated client message. <br/>
+  [@jonas-arkulpa](https://github.com/jonas-arkulpa) in [#157](https://github.com/apollographql/apollo-client-devtools/pull/157)
+
+## 2.1.6
+
+* Removed https://devtools.apollodata.com/graphql from the content security
+  policy section of `manifest.json`, since it doesn't need to be referenced
+  based on how that endpoint is being used. Removing it helps with
+  Firefox's security review process. <br/>
+  [@hwillson](https://github.com/hwillson) in [#156](https://github.com/apollographql/apollo-client-devtools/pull/156)
+* Fix to address issues caused by internal initial state not being set
+  properly, due to trying to access the Apollo Client `queryManager` when
+  it hasn't finished initializing. <br/>
+  [@adampetrie](https://github.com/adampetrie) in [#139](https://github.com/apollographql/apollo-client-devtools/pull/139)
+
 ## 2.1.5
 
 * Fixes a query name parsing issue that lead to a blank page showing when
