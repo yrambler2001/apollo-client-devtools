@@ -22,6 +22,7 @@ if (process.env.NODE_ENV === "production") {
 module.exports = {
   devtool:
     process.env.NODE_ENV === "production" ? "source-map" : "eval-source-map",
+  mode: process.env.NODE_ENV || "production",
   entry: {
     hook: "./src/hook.js",
     devtools: "./src/devtools.js",
@@ -37,21 +38,17 @@ module.exports = {
   },
   resolve: { alias },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.css$/,
         loader: "style-loader!css-loader",
-      },
-      {
-        test: /\.json$/,
-        loader: "json-loader",
       },
       {
         test: /\.less$/,
         loader: "style-loader!css-loader!less-loader",
       },
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         loader: "babel-loader",
         exclude: /(node_modules)/,
       },
