@@ -51,6 +51,11 @@ module.exports = {
         test: /\.(js|jsx)$/,
         loader: "babel-loader",
         exclude: /(node_modules)/,
+        options: {
+          configFile:
+            console.warn(path.resolve(__dirname, "..", "..", ".babelrc")) ||
+            path.resolve(__dirname, "..", "..", ".babelrc"),
+        },
       },
     ],
   },
