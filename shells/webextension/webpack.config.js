@@ -41,11 +41,11 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        loader: "style-loader!css-loader",
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.less$/,
-        loader: "style-loader!css-loader!less-loader",
+        use: ["style-loader", "css-loader", "less-loader"],
       },
       {
         test: /\.(js|jsx)$/,
