@@ -10,6 +10,7 @@ const config = {
     contentScript: "./src/devtools/contentScript.js",
     background: "./src/devtools/background.js",
     renderer: "./src/devtools/renderer.js",
+    apolloClientHook: "./src/devtools/apolloClientHook.js",
   },
   output: {
     path: path.resolve(__dirname, "./build"),
@@ -51,7 +52,7 @@ const config = {
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"],
+        use: ["style-loader", "css-loader?modules=true"],
       },
       {
         test: /\.(png|svg|jpg|gif)$/,

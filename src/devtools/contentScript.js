@@ -1,6 +1,6 @@
 function injectApolloClientDevTools() {
   const script = document.createElement("script");
-  const file = chrome.extension.getURL("renderer.js");
+  const file = chrome.extension.getURL("apolloClientHook.js");
   script.src = file;
 
   document.documentElement.appendChild(script);
