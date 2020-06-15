@@ -7,10 +7,25 @@ import * as serviceWorker from './serviceWorker';
 import { ApolloClient, HttpLink, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 const client = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Hex: {
+        keyFields: ["value"]
+      },
+      Name: {
+        keyFields: ["value"]
+      },
+      Contrast: {
+        keyFields: ["value"]
+      },
+      Rgb: {
+        keyFields: ["value"]
+      },
+    },
+  }),
   link: new HttpLink({
     uri: 'http://localhost:4000',
-  })
+  }),
 });
 
 ReactDOM.render(

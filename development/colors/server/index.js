@@ -21,26 +21,32 @@ const typeDefs = gql`
   }
 
   type Random {
+    id: ID
     color: RandomColor
     scheme: RandomScheme
   }
 
-  type ColorHex {
+  type Hex {
     value: String!
   }
 
-  type ColorRgb {
+  type Rgb {
     value: String!
   }
 
-  type ColorName {
+  type Name {
+    value: String!
+  }
+
+  type Contrast {
     value: String!
   }
 
   type Color {
-    name: ColorName!
-    hex: ColorHex!
-    rbg: ColorRgb!
+    name: Name!
+    hex: Hex!
+    rgb: Rgb!
+    contrast: Contrast!
   }
 
   enum Mode {
@@ -61,25 +67,23 @@ const typeDefs = gql`
   }
 
   type Query {
-    color: Color
+    color(hex: String, rgb: String): Color
     random: Random
     scheme: Scheme
+    savedColors: [Color!]
   }
 
   type Mutation {
-    favoriteColor(name: String!, hex: String!, rgb: String!): [Color!]!
+    saveColor(name: String!, hex: String!, rgb: String!): [Color!]!
   }
 `;
 
 const resolvers = {
   Mutation: {
-    favoriteColor: async (_source, { name, hex, rgb }, { dataSources }) => {
-      const data = dataSources.db.get('favorites')
+    saveColor: async (_source, { name, hex, rgb }, { dataSources }) => {
+      return dataSources.db.get('favorites')
         .push({ name: { value: name }, hex: { value: hex }, rgb: { value: rgb } })
         .write();
-
-      console.log(data);
-      return data;
     },
   },
   Query: {
@@ -89,6 +93,9 @@ const resolvers = {
     },
     scheme: async (_source, { hex, rgb }, { dataSources }) => {
       return dataSources.colorAPI.getColorScheme({ hex, rgb });
+    },
+    savedColors: async (_source, _, { dataSources }) => {
+      return dataSources.db.get('favorites');
     },
   },
   Random: {
@@ -117,12 +124,11 @@ const server = new ApolloServer({
   dataSources: () => ({
     colrAPI: new ColrAPI(),
     colormindAPI: new ColormindAPI(),
-    colorAPI: new ColorAPI(), // identifyColor get color scheme
+    colorAPI: new ColorAPI(),
     db,
   })
 });
 
-// The `listen` method launches a web server.
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
 });
