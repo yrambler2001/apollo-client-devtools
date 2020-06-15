@@ -5,7 +5,7 @@ import Color from './components/Color';
 import RefreshIcon from './components/RefreshIcon';
 
 const RandomColorQuery = () => {
-  const [loadRandomColor, { data: randomColorData }] = useLazyQuery(GET_RANDOM_COLOR, { fetchPolicy: "network-only" });
+  const [loadRandomColor, { data: randomColorData }] = useLazyQuery(GET_RANDOM_COLOR, { fetchPolicy: "no-cache" });
   const [loadColor, { data }]  = useLazyQuery(GET_COLOR);
   const randomColorHexCode = randomColorData?.random?.color?.hex;
 
@@ -23,7 +23,7 @@ const RandomColorQuery = () => {
   return (
     <div className="query random-color">
       <h2>Random Color Query</h2>
-      <a title="Request new color" onClick={() => loadRandomColor()}>
+      <a className="query__request" title="Request new color" onClick={() => loadRandomColor()}>
         <RefreshIcon />
       </a>
       <Color hexCode={hexCode} />

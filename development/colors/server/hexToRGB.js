@@ -25,7 +25,7 @@ function hexToRGB(hex) {
   } else {
       return false;
   }
-  return [r, g, b];
+  return `rgb(${r},${g},${b})`;
 }
 
 module.exports = hexToRGB;

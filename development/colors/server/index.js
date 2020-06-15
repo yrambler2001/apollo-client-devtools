@@ -1,52 +1,13 @@
 const { ApolloServer, gql } = require('apollo-server');
-const ColrAPI = require('./api/colr');
-const ColormindAPI = require('./api/colormind');
 const ColorAPI = require('./api/color');
 const db = require('./db');
 
 const typeDefs = gql`
-  type Tag {
-    id: ID
-    name: String
-  }
-
-  type RandomColor {
-    id: ID
-    hex: String
-    tags: [Tag]
-  }
-
-  type RandomScheme {
-    result: [[Int]] 
-  }
-
-  type Random {
-    id: ID
-    color: RandomColor
-    scheme: RandomScheme
-  }
-
-  type Hex {
-    value: String!
-  }
-
-  type Rgb {
-    value: String!
-  }
-
-  type Name {
-    value: String!
-  }
-
-  type Contrast {
-    value: String!
-  }
-
   type Color {
-    name: Name!
-    hex: Hex!
-    rgb: Rgb!
-    contrast: Contrast!
+    name: String!
+    hex: String!
+    rgb: String!
+    contrast: String!
   }
 
   enum Mode {
@@ -66,10 +27,15 @@ const typeDefs = gql`
     colors: [Color]
   }
 
+  type Random {
+    color: Color
+    scheme: Scheme
+  }
+
   type Query {
     color(hex: String, rgb: String): Color
     random: Random
-    scheme: Scheme
+    scheme(hex: String, rgb: String, mode: Mode, count: Int): Scheme
     savedColors: [Color!]
   }
 
@@ -91,8 +57,8 @@ const resolvers = {
     color: async (_source, { hex, rgb }, { dataSources }) => {
       return dataSources.colorAPI.identifyColor({ hex, rgb });
     },
-    scheme: async (_source, { hex, rgb }, { dataSources }) => {
-      return dataSources.colorAPI.getColorScheme({ hex, rgb });
+    scheme: async (_source, { hex, rgb, mode, count }, { dataSources }) => {
+      return dataSources.colorAPI.getColorScheme({ hex, rgb, mode, count });
     },
     savedColors: async (_source, _, { dataSources }) => {
       return dataSources.db.get('favorites');
@@ -100,10 +66,10 @@ const resolvers = {
   },
   Random: {
     color: async (_source, _, { dataSources }) => {
-      return dataSources.colrAPI.getRandomColor();
+      return dataSources.colorAPI.getRandomColor();
     },
     scheme: async (_source, _, { dataSources }) => {
-      return dataSources.colormindAPI.getRandomScheme();
+      return dataSources.colorAPI.getRandomScheme();
     },
   },
   Mode: {
@@ -122,8 +88,6 @@ const server = new ApolloServer({
   typeDefs, 
   resolvers, 
   dataSources: () => ({
-    colrAPI: new ColrAPI(),
-    colormindAPI: new ColormindAPI(),
     colorAPI: new ColorAPI(),
     db,
   })
