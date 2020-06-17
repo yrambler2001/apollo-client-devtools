@@ -3,13 +3,6 @@ const ColorAPI = require('./api/color');
 const db = require('./db');
 
 const typeDefs = gql`
-  type Color {
-    name: String!
-    hex: String!
-    rgb: String!
-    contrast: String!
-  }
-
   enum Mode {
     MONOCHROME
     MONOCHROME_DARK
@@ -19,6 +12,13 @@ const typeDefs = gql`
     ANALOGIC_COMPLEMENT
     TRIAD
     QUAD
+  }
+
+  type Color {
+    name: String!
+    hex: String!
+    rgb: String!
+    contrast: String!
   }
 
   type Scheme {
@@ -33,34 +33,52 @@ const typeDefs = gql`
   }
 
   type Query {
-    color(hex: String, rgb: String): Color
+    color(hex: String): Color
     random: Random
-    scheme(hex: String, rgb: String, mode: Mode, count: Int): Scheme
-    savedColors: [Color!]
+    scheme(hex: String, mode: Mode, count: Int): Scheme
+    favoritedColors: [Color!]
+  }
+
+  input ColorInput {
+    name: String!
+    hex: String!
+    contrast: String!
   }
 
   type Mutation {
-    saveColor(name: String!, hex: String!, rgb: String!): [Color!]!
+    addColor(color: ColorInput!): [Color!]!
+    removeColor(color: ColorInput!): [Color!]!
   }
 `;
 
 const resolvers = {
   Mutation: {
-    saveColor: async (_source, { name, hex, rgb }, { dataSources }) => {
+    addColor: async (_source, { color }, { dataSources }) => {
+      const exists = dataSources.db.get('favorites').find({hex: color.hex}).value();
+      
+      if (exists) {
+        return dataSources.db.get('favorites').value();
+      }
+
       return dataSources.db.get('favorites')
-        .push({ name: { value: name }, hex: { value: hex }, rgb: { value: rgb } })
+        .push(color)
         .write();
     },
+    removeColor: async (_source, { color }, { dataSources }) => {
+      return dataSources.db.get('favorites')
+        .remove(color)
+        .write();
+    }
   },
   Query: {
     random: () => ({}),
-    color: async (_source, { hex, rgb }, { dataSources }) => {
-      return dataSources.colorAPI.identifyColor({ hex, rgb });
+    color: async (_source, { hex }, { dataSources }) => {
+      return dataSources.colorAPI.identifyColor({ hex });
     },
-    scheme: async (_source, { hex, rgb, mode, count }, { dataSources }) => {
-      return dataSources.colorAPI.getColorScheme({ hex, rgb, mode, count });
+    scheme: async (_source, { hex, mode, count }, { dataSources }) => {
+      return dataSources.colorAPI.getColorScheme({ hex, mode, count });
     },
-    savedColors: async (_source, _, { dataSources }) => {
+    favoritedColors: async (_source, _, { dataSources }) => {
       return dataSources.db.get('favorites');
     },
   },

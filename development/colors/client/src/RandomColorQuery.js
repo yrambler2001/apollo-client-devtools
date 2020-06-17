@@ -18,7 +18,6 @@ const RandomColorQuery = () => {
   }, [loadColor, randomColorHexCode]);
 
   const hexCode = data?.color?.hex?.value;
-  const contrast = data?.color?.contrast?.value;
 
   return (
     <div className="query random-color">

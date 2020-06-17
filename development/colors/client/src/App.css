@@ -1,21 +1,79 @@
-.App {
+body {
   font-family: 'Roboto', Arial, Helvetica, sans-serif;
 }
 
-.query {
+h1, h2, h3 {
+  font-family: 'Abril Fatface'
+}
+
+header {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  height: 40px;
+  padding: 16px;
+  font-family: 'Abril Fatface'
+}
+
+header h1 {
+  margin-right: 40px;
+}
+
+header nav a {
+  margin: 0 16px;
+  font-size: 24px;
+  text-decoration: none;
+}
+
+main {
+  height: calc(100vh - 72px);
+}
+
+.contrast-dark {
+  color: #000000;
+}
+
+.contrast-light {
+  color: #ffffff;
+}
+
+.favorites {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.favorites .favorites__color {
+  height: calc((100vh - 72px) / 2);
+}
+
+.scheme {
+  height: 100%;
 }
 
 .color {
-  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
 }
 
-.color__block {
-  width: 100%;
-  height: 360px;
-  border-radius: 3px;
+.color__save-icon {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  fill: white;
+  cursor: pointer;
+}
+
+.color__name {
+  font-weight: light;
+}
+
+.color__hexCode {
+  padding: 8px 0 16px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .icon {
@@ -24,4 +82,13 @@
 
 .icon-heart.saved {
   color: red;
+}
+
+.scheme {
+  display: flex;
+  justify-content: center;
+}
+
+.scheme__color {
+  flex: 1 1;
 }

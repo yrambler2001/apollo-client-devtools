@@ -1,13 +1,23 @@
 import { gql } from '@apollo/client';
 
+export const COLOR_FIELDS = gql`
+  fragment colorFields on Color {
+    name
+    hex
+    contrast
+  }
+`;
+
 export const GET_RANDOM_COLOR = gql`
   query GetRandomColor {
     random {
       color {
-        hex
+        ...colorFields
       }
     }
   }
+
+  ${COLOR_FIELDS}
 `;
 
 export const GET_RANDOM_SCHEME = gql`
@@ -21,47 +31,35 @@ export const GET_RANDOM_SCHEME = gql`
 `;
 
 export const GET_COLOR = gql`
-  query GetColor($hex: String, $rgb: String) {
-    color(hex: $hex, rgb: $rgb) {
-      name
-      hex
-      rgb
-      contrast
+  query GetColor($hex: String) {
+    color(hex: $hex) {
+      ...colorFields
     }
   }
+
+  ${COLOR_FIELDS}
 `;
 
 export const GET_COLOR_SCHEME = gql`
-  query GetColorScheme($hex: String, $rgb: String, $mode: Mode, $count: Int) {
-    scheme(hex: $hex, rgb: $rgb, mode: $mode, count: $count) {
+  query GetColorScheme($hex: String, $mode: Mode, $count: Int) {
+    scheme(hex: $hex, mode: $mode, count: $count) {
       mode
       count
       colors {
-        name
-        hex
-        rgb
-        contrast
+        ...colorFields
       }
     }
   }
+
+  ${COLOR_FIELDS}
 `;
 
 export const GET_SAVED_COLORS = gql`
-query GetSavedColors {
-  savedColors {
-    color {
-      name {
-        value
-      }
-
-      hex {
-        value
-      }
-
-      rgb {
-        value
-      }
+  query GetSavedColors {
+    favoritedColors {
+      ...colorFields
     }
   }
-}
+
+  ${COLOR_FIELDS}
 `;

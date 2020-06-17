@@ -1,6 +1,8 @@
 const { RESTDataSource } = require('apollo-datasource-rest');
 
-const hexCode = Math.floor(Math.random()*16777215).toString(16);
+function hexCode() {
+  return Math.floor(Math.random()*16777215).toString(16);
+}
 
 class ColorAPI extends RESTDataSource {
   constructor() {
