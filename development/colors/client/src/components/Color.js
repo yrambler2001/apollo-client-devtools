@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import SaveIcon from './SaveIcon';
 import cx from 'classnames';
 import { useMutation } from '@apollo/client';
+import { GET_SAVED_COLORS } from '../queries';
 import { ADD_COLOR_TO_FAVORITES, REMOVE_COLOR_FROM_FAVORITES } from '../mutations';
 
 const Color = ({ 
@@ -16,11 +17,19 @@ const Color = ({
   const variables = { color: { name, hex: hexCode, contrast } };
   const [addColor] = useMutation(ADD_COLOR_TO_FAVORITES, {
     variables,
-    update(cache, { data: { favoriteColors } }) {
-
+    update(cache, { data: { addColor } }) {
+      cache.writeQuery({ query: GET_SAVED_COLORS, data: { favoritedColors: addColor } });
     }
   });
-  const [removeColor] = useMutation(REMOVE_COLOR_FROM_FAVORITES, { variables });
+  const [removeColor] = useMutation(REMOVE_COLOR_FROM_FAVORITES, { 
+    variables, 
+    update(cache, { data: { removeColor } }) {
+      const colorToRemove = removeColor[0];
+      const { favoritedColors } = cache.readQuery({ query: GET_SAVED_COLORS });
+      const updatedColors = favoritedColors.filter(color => color.hex !== colorToRemove.hex);
+      cache.writeQuery({ query: GET_SAVED_COLORS, data: { favoritedColors: updatedColors } });
+    }
+  });
 
   function onClick() {
     if (saved) {
