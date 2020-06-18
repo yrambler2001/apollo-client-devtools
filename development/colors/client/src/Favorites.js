@@ -15,7 +15,7 @@ const Favorites = () => {
     <div className="favorites favorites--empty">You haven't favorited any colors yet!</div>
   ) : (
     <div className="favorites">
-      {colors.map(({ contrast, hex, name }, index) => (
+      {colors.map(({ contrast, hex, name, saved }, index) => (
         <Color 
           key={`${hex}-${index}`}
           className="favorites__color"

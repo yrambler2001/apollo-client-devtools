@@ -5,11 +5,15 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import { useQuery } from '@apollo/client';
 import ColorSchemeGenerator from './ColorSchemeGenerator';
 import Favorites from './Favorites';
+import { GET_SAVED_COLORS } from './queries';
 import './App.css';
 
 function App() {
+  useQuery(GET_SAVED_COLORS);
+
   return (
     <Router>
       <div className="App">

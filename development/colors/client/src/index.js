@@ -4,13 +4,24 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import { ApolloClient, HttpLink, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloClient, HttpLink, InMemoryCache, ApolloProvider, makeReference } from '@apollo/client';
 
 const client = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {
       Color: {
-        keyFields: ["hex"]
+        keyFields: ["hex"],
+        fields: {
+          saved: {
+            read(_, { readField }) {
+              const hex = readField("hex");
+              const favoritedColors = readField("favoritedColors", makeReference("ROOT_QUERY"));
+              return favoritedColors.some(colorRef => {
+                return hex === readField("hex", colorRef);
+              });
+            }
+          },
+        }
       }
     }
   }),

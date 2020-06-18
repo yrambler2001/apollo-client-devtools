@@ -9,13 +9,14 @@ const ColorScheme = ({ colors }) => {
 
   return (
     <div className="scheme">
-      {colors.map(({ contrast, hex, name }, index) => (
+      {colors.map(({ contrast, hex, name, saved }, index) => (
         <Color 
           key={`${hex}-${index}`}
           className="scheme__color"
           contrast={contrast}
           hexCode={hex} 
           name={name}
+          isSaved={saved}
         />
       ))}
     </div>

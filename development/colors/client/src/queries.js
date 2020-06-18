@@ -13,6 +13,7 @@ export const GET_RANDOM_COLOR = gql`
     random {
       color {
         ...colorFields
+        saved @client
       }
     }
   }
@@ -34,6 +35,7 @@ export const GET_COLOR = gql`
   query GetColor($hex: String) {
     color(hex: $hex) {
       ...colorFields
+      saved @client
     }
   }
 
@@ -47,6 +49,7 @@ export const GET_COLOR_SCHEME = gql`
       count
       colors {
         ...colorFields
+        saved @client
       }
     }
   }
