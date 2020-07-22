@@ -1,6 +1,6 @@
-import { initDevTools, writeToCache } from "../../application";
+import { initDevTools, writeQuery } from "../../application";
 
 window.devtools = {
   initialize: initDevTools,
-  writeToCache,
+  writeQuery,
 };
