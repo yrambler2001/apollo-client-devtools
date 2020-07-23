@@ -40,6 +40,7 @@ const GET_CACHE = gql`
   query GetCache {
     mutations @client
     queries @client
+    cache @client
   }
 `;
 
