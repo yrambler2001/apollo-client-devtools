@@ -43,16 +43,7 @@ devtools.listen(CREATE_DEVTOOLS_PANEL, ({ detail: { payload } }) => {
 
           if (!isAppInitialized) {
             window.devtools.initialize();
-            window.devtools.writeQuery({
-              data: { queries, mutations, cache },
-              query: gql`
-                query Client {
-                  queries
-                  mutations
-                  cache
-                }
-              `
-            });
+            window.devtools.writeData({ queries, mutations, cache });
             isAppInitialized = true;
             sendMessageToClient('request-update');
 
@@ -62,8 +53,8 @@ devtools.listen(CREATE_DEVTOOLS_PANEL, ({ detail: { payload } }) => {
             });
   
             devtools.listen('update', ({ detail: { payload } }) => {
-              console.log(JSON.parse(payload));
-              // window.devtools.writeQuery();
+              const { queries, mutations, cache } = JSON.parse(payload);
+              window.devtools.writeData({ queries, mutations, cache });
             });
           }
         });

@@ -1,6 +1,6 @@
-import { initDevTools, writeQuery } from "../../application";
+import { initDevTools, writeData } from "../../application";
 
 window.devtools = {
   initialize: initDevTools,
-  writeQuery,
+  writeData,
 };

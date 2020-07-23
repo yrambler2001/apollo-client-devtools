@@ -44,6 +44,11 @@
       "name": "Chambray",
       "hex": "#37568F",
       "contrast": "#ffffff"
+    },
+    {
+      "name": "Wine Berry",
+      "hex": "#501B41",
+      "contrast": "#ffffff"
     }
   ]
 }
