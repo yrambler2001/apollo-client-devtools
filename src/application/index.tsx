@@ -1,13 +1,11 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
-import React from "react";
+import { ThemeProvider } from "emotion-theming";
 import { render } from "react-dom";
 import { ApolloClient, ApolloProvider, InMemoryCache, useQuery, gql, makeVar } from "@apollo/client";
 import "@apollo/space-kit/reset.css";
-import { AlertBanner } from "@apollo/space-kit/AlertBanner";
-
-// import Panel from './components/Panel';
-import { Explorer } from './Explorer/Explorer';
+import { colors } from "@apollo/space-kit/colors";
+import { SidebarLayout } from "./Layouts/SidebarLayout";
 
 export enum ColorThemes {
   Light = 'light',
@@ -56,17 +54,32 @@ export const writeData = ({ queries, mutations, cache }) => {
   cacheVar(cache);
 };
 
-const GET_CACHE = gql`
-  query GetCache {
-    mutations @client
-    queries @client
-    cache @client
+const GET_THEME = gql`
+  query GetTheme {
+    colorTheme @client
   }
 `;
 
+const themes = {
+  [ColorThemes.Light]: {
+    primary: colors.indigo.darkest
+  },
+  [ColorThemes.Dark]: {
+    primary: colors.black.base
+  },
+};
+
 const App = () => {
-  useQuery(GET_CACHE);
-  return (<Explorer />)
+  const { data = { colorTheme: ColorThemes.Light } } = useQuery(GET_THEME);
+
+  return (
+    <ThemeProvider theme={{ theme: themes[data.colorTheme] }}>
+      <SidebarLayout>
+        <SidebarLayout.Sidebar>Sidebar</SidebarLayout.Sidebar>
+        <SidebarLayout.Main>Main</SidebarLayout.Main>
+      </SidebarLayout>
+    </ThemeProvider>
+  )
 };
 
 export const initDevTools = () => {
