@@ -111,7 +111,6 @@ function initializeHook() {
   }
 
   function handleActionHookForDevtools() {
-    console.log(ACTION_HOOK_FIRED);
     sendMessageToTab(ACTION_HOOK_FIRED);
   }
 

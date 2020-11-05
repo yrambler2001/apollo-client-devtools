@@ -36,7 +36,7 @@ export const MutationViewer = ({ mutationString = '', variables = {} }) => (
     <h4 css={queryStringHeader}>
       Mutation String 
       <CopyToClipboard text={mutationString}>
-        <IconCopy css={copyIconStyle} data-testid="copy-query-string" />
+        <IconCopy css={copyIconStyle} data-testid="copy-mutation-string" />
       </CopyToClipboard> 
     </h4>
     <GraphqlCodeBlock
@@ -48,7 +48,7 @@ export const MutationViewer = ({ mutationString = '', variables = {} }) => (
       <div css={queryDataHeader}>
         <span>Variables</span>
         <CopyToClipboard text={stringifyObject(variables)}>
-          <IconCopy css={copyIconStyle} data-testid="copy-query-data" />
+          <IconCopy css={copyIconStyle} data-testid="copy-mutation-variables" />
         </CopyToClipboard> 
       </div>
       <div css={queryDataMain}>
