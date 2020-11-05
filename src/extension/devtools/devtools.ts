@@ -68,6 +68,7 @@ devtools.listen(CREATE_DEVTOOLS_PANEL, ({ payload }) => {
 
             devtools.listen(UPDATE, ({ payload }) => {
               const { queries, mutations, cache } = JSON.parse(payload);
+              console.log(UPDATE);
               writeData({ queries, mutations, cache: JSON.stringify(cache) });
             });
 
