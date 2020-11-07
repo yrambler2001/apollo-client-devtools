@@ -6,7 +6,11 @@ import { rem } from "polished";
 import { graphiQLQuery } from '../Explorer/Explorer';
 import { currentScreen, Screens } from "../Layouts/Navigation";
 
-export const runButtonStyles = css`
+interface RunInGraphiQLButtonProps {
+  operation: string;
+};
+
+export const buttonStyles = css`
   appearance: none;
   display: flex;
   align-items: center;
@@ -22,17 +26,15 @@ export const runButtonStyles = css`
   }
 `;
 
-export const RunInGraphiQLButton = ({ operation }) => {
-  return (
-    <button 
-      css={runButtonStyles}
-      onClick={() => {
-        graphiQLQuery(operation);
-        currentScreen(Screens.Explorer);
-      }}
-    >
-      <IconRun />
-      <span>Run in GraphiQL</span>
-    </button>
-  );
-}
+export const RunInGraphiQLButton = ({ operation }: RunInGraphiQLButtonProps) => (
+  <button 
+    css={buttonStyles}
+    onClick={() => {
+      graphiQLQuery(operation);
+      currentScreen(Screens.Explorer);
+    }}
+  >
+    <IconRun />
+    <span>Run in GraphiQL</span>
+  </button>
+);
